@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2 class="text-center font-weight-bold" style="margin-top: 10vh">Ваша корзина</h2>
+
+    <ol class="items-container list-group list-group-numbered" style="width:60vw">
+      {% for item in items %}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">{{ item.name }}</div>
+             {{ item.quantity}} штук
+            <br>
+             {{ item.item_price }} за 1 шт.
+         </div>
+
+        <span class="badge bg-primary rounded-pill" style="font-size:150%">{{item.price}}</span>
+        </li>
+      {% endfor %}
+
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <form action="{% url 'payments:create_stripe_checkout' %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-success">Оплатить</button>
+          </form>
+         </div>
+        <span class="badge bg-primary rounded-pill" style="font-size:200%">Итог: {{ result_price }}</span>
+        </li>
+
+    </ol>
+
+  <h2 class="font-weight-bold" style="margin-left: 60vw"></h2>
+
+{% endblock %}

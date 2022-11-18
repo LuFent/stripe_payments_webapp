@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shop</title>
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'toast/toast.min.css' %}">
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
+
+    <script defer src="{% static 'toast/toast.js' %}"></script>
+    <script defer src="{% static 'index.js' %}"></script>
+
+    <style>
+    .row {
+      display: flex;
+    }
+    .item {
+      text-align: center;
+      padding: 15px;
+      box-sizing: border-box;
+      width: 30 vw;
+      white-space: nowrap;
+      display: flex;
+      flex-wrap: nowrap;
+    }
+    .description {
+      word-wrap: break-word;
+    }
+    .site-header {
+       display: flex;
+       justify-content: flex-end;
+    }
+    .items-container {
+    margin-top: 10vh;
+    margin-left: 15vw
+    }
+    .notification-container {
+       display: flex;
+       justify-content: center;
+       margin-top: 15vh
+    }
+    </style>
+
+  </head>
+
+  <body>
+  <div class="site-header" >
+      <h5 class="font-weight-bold" style="margin-right: 20vw">Очень крутой магазин</h5>
+      <a href="{% url 'payments:all_items' %}" class="font-weight-bold" style="margin-right: 30vw">Товары</a>
+      <a href="{% url 'payments:view_cart' %}" class="font-weight-bold" style="margin-right: 15vw">Корзина</a>
+  </div>
+{% block content %}
+  {% endblock %}
+
+    </body>
+</html>

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="items-container card" style="width: 30rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{ item.name }}</h5>
+        <p class="card-text"> {{ item.description}} </p>
+
+        {% if item.absolute_discount %}
+            <p class="card-text"> Скидка {{ item.absolute_discount }} рублей </p>
+            <p class="card-text"> Цена {{ item.price }}</p>
+            <p class="card-text"> Цена со скидкой {{ item.price_with_discount  }} </p>
+        {% elif item.percent_discount %}
+            <p class="card-text"> Скидка {{ item.percent_discount }} % </p>
+            <p class="card-text"> Цена {{ item.price }}</p>
+            <p class="card-text"> Цена со скидкой {{ item.price_with_discount  }} </p>
+
+        {% else %}
+            <p class="card-text"> Цена {{ item.price }}</p>
+
+        {% endif %}
+
+        <button class="card-link btn btn-outline-success card-link" id="addToCardButton_{{ item.id }}" onclick="addItemToCart(this.id, {% url 'payments:add_to_cart' %})"> В Корзину</button>
+
+        <a class="btn btn-outline-danger" href="{% url 'payments:all_items' %}" class="card-link"> Назад</a>
+      </div>
+    </div>
+
+  </body>
+</html>
+{% endblock %}
