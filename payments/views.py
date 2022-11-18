@@ -26,7 +26,7 @@ def serialize_item(item):
         'description': item.description}
 
     discount = Discount.objects.first()
-    try:
+    if discount:
         if discount.absolute_discount:
             serialized_item['absolute_discount'] = discount.absolute_discount
             serialized_item['percent_discount'] = None
@@ -36,7 +36,7 @@ def serialize_item(item):
             serialized_item['percent_discount'] = discount.percent_discount
             serialized_item['price_with_discount'] = item.price * (100 - discount.percent_discount) / 100
 
-    except ObjectDoesNotExist:
+    else:
         serialized_item['absolute_discount'] = None
         serialized_item['percent_discount'] = None
 
@@ -131,7 +131,10 @@ def add_to_cart(request):
 def create_stripe_checkout(request):
     cart_id = request.session['cart']
     cart = Cart.objects.filter(id=cart_id).fetch_with_result_price().first()
-    discount = [{'coupon': f'discount_{Discount.objects.first().id}'}]
+    discount = Discount.objects.first()
+    if discount:
+        discount = [{'coupon': f'discount_{discount.id}'}]
+
     order_items_data = [{"price_data": {
                     "currency": "rub",
                     "unit_amount": int(order_item.item.price * 100),
@@ -147,7 +150,7 @@ def create_stripe_checkout(request):
         mode='payment',
         success_url=request.build_absolute_uri(reverse('payments:successful_payment')),
         cancel_url=request.build_absolute_uri(reverse('payments:view_cart')),
-        discounts=discount
+        discounts=discount if discount else []
     )
 
     last_checkout_id = request.session.get('last_checkout', 0)
