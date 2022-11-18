@@ -122,18 +122,20 @@ class Discount(models.Model):
                     raise ValidationError(f'Скидка превышает цену товара {item}')
 
     def save(self, *args, **kwargs):
+        super(Discount, self).save(*args, **kwargs)
 
         if self.absolute_discount:
             with suppress(stripe.error.InvalidRequestError):
                 stripe.Coupon.delete(f"discount_{self.id}")
             stripe.Coupon.create(duration="forever", id=f"discount_{self.id}", amount_off=self.absolute_discount*100, currency='rub')
 
+
         else:
             with suppress(stripe.error.InvalidRequestError):
                 stripe.Coupon.delete(f"discount_{self.id}")
             stripe.Coupon.create(duration="forever", id=f"discount_{self.id}", percent_off=self.percent_discount)
 
-        super(Discount, self).save(*args, **kwargs)
+
 
 
     class Meta:
